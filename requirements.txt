@@ -1,3 +1,4 @@
-git+https://github.com/pymc-devs/pymc.git
+pymc==4.0.0b6
+#git+https://github.com/pymc-devs/pymc.git
 #git+https://github.com/aesara-devs/aesara.git
 
