@@ -1,3 +1,2 @@
 #! /bin/bash
-
-docker run -it --name pymc:v4.0 --net=host -v "$(pwd)":/home/jovyan
+docker run -it -v "$(pwd)":/home/jovyan --rm pymc:v4.0 bash

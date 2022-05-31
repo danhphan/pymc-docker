@@ -1,3 +1,4 @@
 #! /bin/bash
+docker run -it -p 8888:8888 -v "$(pwd)":/home/jovyan --rm  pymc:v4.0
 
-jupyter notebook --no-browser --allow-root --port=8989 --NotebookApp.token='pymcv4'
+
