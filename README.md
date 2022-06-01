@@ -20,6 +20,4 @@ docker run -it -p 8888:8888 -v "$(pwd)":/home/jovyan --rm  pymc:v4.0
 ```
 cd to_your_working_folder
 docker run -it -v "$(pwd)":/home/jovyan --rm pymc:v4.0 bash
-# If you want to run jupyter notebook here
-# jupyter notebook --no-browser --allow-root --port=8888:8888
 ```
