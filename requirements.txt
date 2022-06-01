@@ -1,1 +1,12 @@
-pymc==4.0.0b6
+aeppl==0.0.31
+aesara==2.6.2
+arviz>=0.12.0
+cachetools>=4.2.1
+cloudpickle
+fastprogress>=0.2.0
+numpy>=1.15.0
+scipy>=1.4.1
+typing-extensions>=3.7.4
+#pymc==4.0.0b6
+git+https://github.com/pymc-devs/pymc.git
+watermark
