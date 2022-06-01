@@ -47,6 +47,7 @@ USER $NB_UID
 RUN python3 -m pip install --upgrade pip setuptools wheel
 
 COPY requirements.txt .
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt && conda install python-graphviz
+
 
 CMD ["jupyter", "notebook", "--allow-root", "--ip=0.0.0.0"]
