@@ -1,5 +1,5 @@
 FROM jupyter/base-notebook
-# FROM jupyter/minimal-notebook:python-3.9.5
+#FROM jupyter/minimal-notebook:python-3.9.5
 
 LABEL name="pymc"
 LABEL version="4.0.0b6"
@@ -37,13 +37,18 @@ RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificate
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install python3.9
+# RUN apt-get install python3.9
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
 COPY environment-dev.yml .
-RUN mamba env create -f environment-dev.yml python==3.8
+RUN mamba env create -f environment-dev.yml \
+    && conda install python==3.9 \
+    && conda clean --all -f -y 
+# && fix-permissions "${CONDA_DIR}" \
+# && fix-permissions "/home/${NB_USER}"
+
 # Give bash access to Anaconda
 RUN echo "source activate pymc-dev" >> ~/.bashrc && \
     source ~/.bashrc
@@ -51,6 +56,10 @@ RUN echo "source activate pymc-dev" >> ~/.bashrc && \
 RUN /bin/bash -c ". activate pymc-dev && \
     pip install --upgrade pip && \ 
     pip install git+https://github.com/pymc-devs/pymc.git"
+
+SHELL ["/bin/bash","-c"]
+RUN conda init
+RUN echo 'conda activate pymc-dev' >> ~/.bashrc
 
 EXPOSE 8888
 
