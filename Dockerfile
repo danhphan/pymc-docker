@@ -1,8 +1,9 @@
 FROM jupyter/base-notebook
+# FROM jupyter/minimal-notebook:python-3.9.5
 
 LABEL name="pymc"
-LABEL version="4.0"
-LABEL description="Environment for PyMC version 4"
+LABEL version="4.0.0b6"
+LABEL description="Environment for PyMC version 4.0.0b6"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
@@ -38,16 +39,19 @@ RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificate
 
 RUN apt-get install python3.9
 
-# Open Ports for Jupyter
-EXPOSE 8888
-
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
-RUN python3 -m pip install --upgrade pip setuptools wheel
+COPY environment-dev.yml .
+RUN mamba env create -f environment-dev.yml python==3.8
+# Give bash access to Anaconda
+RUN echo "source activate pymc-dev" >> ~/.bashrc && \
+    source ~/.bashrc
 
-COPY requirements.txt .
-RUN pip3 install -r requirements.txt && conda install python-graphviz
+RUN /bin/bash -c ". activate pymc-dev && \
+    pip install --upgrade pip && \ 
+    pip install git+https://github.com/pymc-devs/pymc.git"
 
+EXPOSE 8888
 
-CMD ["jupyter", "notebook", "--allow-root", "--ip=0.0.0.0"]
+CMD ["conda", "run", "--no-capture-output", "-n", "pymc-dev", "jupyter","notebook","--ip=0.0.0.0","--port=8888","--no-browser","--allow-root"]
