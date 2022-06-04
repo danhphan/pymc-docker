@@ -1,5 +1,4 @@
-FROM jupyter/base-notebook
-#FROM jupyter/minimal-notebook:python-3.9.5
+FROM jupyter/minimal-notebook:python-3.9.5
 
 LABEL name="pymc"
 LABEL version="4.0.0b6"
@@ -23,13 +22,6 @@ RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificate
     libfreetype6-dev \
     libzmq3-dev \
     pkg-config \
-    python3-pip \
-    python3-dev \
-    # ---- nbconvert dependencies ----
-    texlive-xetex \
-    texlive-fonts-recommended \
-    texlive-plain-generic \
-    # ----
     rsync \
     software-properties-common \
     unzip \
@@ -44,10 +36,7 @@ USER $NB_UID
 
 COPY environment-dev.yml .
 RUN mamba env create -f environment-dev.yml \
-    && conda install python==3.9 \
-    && conda clean --all -f -y 
-# && fix-permissions "${CONDA_DIR}" \
-# && fix-permissions "/home/${NB_USER}"
+    && conda clean --all -f -y
 
 # Give bash access to Anaconda
 RUN echo "source activate pymc-dev" >> ~/.bashrc && \
