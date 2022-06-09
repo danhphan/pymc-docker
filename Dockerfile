@@ -1,8 +1,8 @@
-FROM jupyter/minimal-notebook:python-3.9.5
+FROM jupyter/base-notebook:python-3.9.12
 
 LABEL name="pymc"
-LABEL version="4.0.0b6"
-LABEL description="Environment for PyMC version 4.0.0b6"
+LABEL version="4.0.0"
+LABEL description="Environment for PyMC version 4.0.0"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
@@ -29,27 +29,21 @@ RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificate
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# RUN apt-get install python3.9
-
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
-COPY environment-dev.yml .
-RUN mamba env create -f environment-dev.yml \
+COPY environment.yml .
+RUN mamba env create -f environment.yml \
     && conda clean --all -f -y
 
-# Give bash access to Anaconda
-RUN echo "source activate pymc-dev" >> ~/.bashrc && \
-    source ~/.bashrc
-
-RUN /bin/bash -c ". activate pymc-dev && \
-    pip install --upgrade pip && \ 
-    pip install git+https://github.com/pymc-devs/pymc.git"
+# # Give bash access to Anaconda
+# RUN echo "source activate pymc" >> ~/.bashrc && \
+#     source ~/.bashrc
 
 SHELL ["/bin/bash","-c"]
-RUN conda init
-RUN echo 'conda activate pymc-dev' >> ~/.bashrc
+RUN conda init \
+    && echo 'conda activate pymc' >> ~/.bashrc
 
 EXPOSE 8888
 
-CMD ["conda", "run", "--no-capture-output", "-n", "pymc-dev", "jupyter","notebook","--ip=0.0.0.0","--port=8888","--no-browser","--allow-root"]
+CMD ["conda", "run", "--no-capture-output", "-n", "pymc", "jupyter","notebook","--ip=0.0.0.0","--port=8888","--no-browser","--allow-root"]
