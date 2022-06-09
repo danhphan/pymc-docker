@@ -1,12 +1,10 @@
 # "dev" conda envs are to be used by devs in setting their local environments
-name: pymc-dev
+name: pymc
 channels:
   - conda-forge
   - defaults
 dependencies:
-  - aeppl=0.0.31
-  - aesara=2.6.2
-  - arviz>=0.12.0
+  - pymc>=4.0.0
   - blas
   - cachetools>=4.2.1
   - cloudpickle
@@ -14,7 +12,7 @@ dependencies:
   - h5py>=2.7
   - ipython>=7.16
   - jax
-  - myst-nb
+  - jupyterlab
   - numpy>=1.15.0
   - numpydoc
   - pandas>=0.24.0
