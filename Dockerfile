@@ -1,7 +1,6 @@
 FROM jupyter/base-notebook:python-3.9.12
 
 LABEL name="pymc"
-LABEL version="4.0.0"
 LABEL description="Environment for PyMC version 4.0.0"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -36,14 +35,14 @@ COPY environment.yml .
 RUN mamba env create -f environment.yml \
     && conda clean --all -f -y
 
-# # Give bash access to Anaconda
-# RUN echo "source activate pymc" >> ~/.bashrc && \
-#     source ~/.bashrc
+RUN mkdir /home/jovyan/workspace
+WORKDIR /home/jovyan/workspace
 
+# For running from bash
 SHELL ["/bin/bash","-c"]
-RUN conda init \
-    && echo 'conda activate pymc' >> ~/.bashrc
+RUN echo "conda activate pymc" >> ~/.bashrc && \
+    source ~/.bashrc
 
+# For running from jupyter notebook
 EXPOSE 8888
-
 CMD ["conda", "run", "--no-capture-output", "-n", "pymc", "jupyter","notebook","--ip=0.0.0.0","--port=8888","--no-browser","--allow-root"]
