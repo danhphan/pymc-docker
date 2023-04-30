@@ -48,12 +48,16 @@ RUN /bin/bash -c ". activate pymc && \
     pip install --upgrade pip && \ 
     pip install --upgrade 'jax[cuda]' -f https://storage.googleapis.com/jax-releases/jax_releases.html"
 
-WORKDIR "/home/jovyan"
+RUN mkdir /workspace
+WORKDIR /workspace
 
+USER jovyan
+
+# For running from bash
 SHELL ["/bin/bash","-c"]
-RUN conda init \
-    && echo 'conda activate pymc' >> ~/.bashrc
+RUN echo "conda activate pymc" >> ~/.bashrc && \
+    source ~/.bashrc
 
+# For running from jupyter notebook
 EXPOSE 8888
-
 CMD ["conda", "run", "--no-capture-output", "-n", "pymc", "jupyter","notebook","--ip=0.0.0.0","--port=8888","--no-browser","--allow-root"]
